@@ -177,15 +177,15 @@ import PIL
 
 def pil2array(im,alpha=0):
     if im.mode=="L":
-        a = numpy.fromstring(im.tostring(),'B')
+        a = numpy.fromstring(im.tobytes(),'B')
         a.shape = im.size[1],im.size[0]
         return a
     if im.mode=="RGB":
-        a = numpy.fromstring(im.tostring(),'B')
+        a = numpy.fromstring(im.tobytes(),'B')
         a.shape = im.size[1],im.size[0],3
         return a
     if im.mode=="RGBA":
-        a = numpy.fromstring(im.tostring(),'B')
+        a = numpy.fromstring(im.tobytes(),'B')
         a.shape = im.size[1],im.size[0],4
         if not alpha: a = a[:,:,:3]
         return a
@@ -194,13 +194,13 @@ def pil2array(im,alpha=0):
 def array2pil(a):
     if a.dtype==dtype("B"):
         if a.ndim==2:
-            return PIL.Image.frombytes("L",(a.shape[1],a.shape[0]),a.tostring())
+            return PIL.Image.frombytes("L",(a.shape[1],a.shape[0]),a.tobytes())
         elif a.ndim==3:
-            return PIL.Image.frombytes("RGB",(a.shape[1],a.shape[0]),a.tostring())
+            return PIL.Image.frombytes("RGB",(a.shape[1],a.shape[0]),a.tobytes())
         else:
             raise OcropusException("bad image rank")
     elif a.dtype==dtype('float32'):
-        return PIL.Image.fromstring("F",(a.shape[1],a.shape[0]),a.tostring())
+        return PIL.Image.frombytes("F",(a.shape[1],a.shape[0]),a.tobytes())
     else:
         raise OcropusException("unknown image type")
 
